@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     app_name: str = "our-fintech-backend"
     debug: bool = False
     api_v1_prefix: str = "/api/v1"
+    database_url: str = "sqlite:///./tuplan.db"
 
 
 settings = Settings()
