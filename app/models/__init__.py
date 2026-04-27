@@ -10,8 +10,10 @@ from app.models.transaction import (
 from app.models.user import (
     Currency,
     Language,
+    Token,
     User,
     UserCreate,
+    UserLogin,
     UserPreferences,
     UserUpdate,
 )
@@ -30,12 +32,14 @@ __all__ = [
     "DebtStatus",
     "DebtUpdate",
     "Language",
+    "Token",
     "Transaction",
     "TransactionCreate",
     "TransactionType",
     "TransactionUpdate",
     "User",
     "UserCreate",
+    "UserLogin",
     "UserPreferences",
     "UserUpdate",
 ]

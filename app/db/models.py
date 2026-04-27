@@ -15,6 +15,7 @@ class UserDB(SQLModel, table=True):
     id: Optional[uuid.UUID] = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
     email: str = Field(unique=True, index=True)
+    hashed_password: str
     currency: str = Field(default="COP", max_length=3)
     language: str = Field(default="es", max_length=5)
     monthly_budget: Decimal = Field(
