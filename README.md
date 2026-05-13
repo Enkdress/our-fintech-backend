@@ -27,15 +27,19 @@ cd our-fintech-backend
 uv sync
 ```
 
-This creates a virtual environment at `.venv/` and installs all dependencies (including dev) from `uv.lock`.
-
 **3. Set up environment variables**
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` as needed.
+Edit `.env` as needed. See [docs/auth.md](docs/auth.md) for required JWT variables.
+
+**4. Apply migrations**
+
+```bash
+uv run alembic upgrade head
+```
 
 ## Commands
 
@@ -61,34 +65,35 @@ The API will be available at `http://localhost:8000`.
 | `http://localhost:8000/docs` | Swagger UI (interactive API docs) |
 | `http://localhost:8000/redoc` | ReDoc API docs |
 
-## Running tests
+## Documentation
 
-```bash
-make test
-```
-
-## Adding dependencies
-
-```bash
-# Production dependency
-make add pkg=<package>
-
-# Dev-only dependency
-make add-dev pkg=<package>
-```
-
-Always commit both `pyproject.toml` and `uv.lock` after adding dependencies.
+| Topic | File |
+|-------|------|
+| Authentication (JWT, register, login) | [docs/auth.md](docs/auth.md) |
+| Database layer (SQLModel, models, session) | [docs/database.md](docs/database.md) |
+| Migrations (Alembic, SQLite quirks) | [docs/migrations.md](docs/migrations.md) |
 
 ## Project structure
 
 ```
 app/
-├── main.py          # App entry point, router registration
+├── main.py              # App entry point, lifespan hooks
 ├── core/
-│   └── config.py    # Settings loaded from environment / .env
+│   ├── config.py        # Settings loaded from environment / .env
+│   └── security.py      # Password hashing and JWT utilities
 ├── api/
+│   ├── deps.py          # Shared dependencies (get_current_user)
 │   └── v1/
-│       └── router.py  # API v1 routes
-└── models/          # Pydantic models
-tests/               # Pytest test suite
+│       ├── router.py    # API v1 root router
+│       ├── auth.py      # Register + login endpoints
+│       └── categories.py# Categories CRUD
+├── db/
+│   ├── models.py        # SQLModel table definitions
+│   ├── session.py       # Engine and session dependency
+│   └── seed.py          # System category seeding
+└── models/              # Pydantic request/response schemas
+alembic/
+└── versions/            # Migration files
+docs/                    # Extended documentation
+tests/                   # Pytest test suite
 ```
