@@ -53,7 +53,7 @@ def update_category(
     category = session.get(CategoryDB, category_id)
     if not category:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
-    if category.is_system or category.user_id != current_user.id:
+    if not category.is_system and category.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot modify this category")
 
     updates = payload.model_dump(exclude_unset=True)
@@ -75,7 +75,7 @@ def delete_category(
     category = session.get(CategoryDB, category_id)
     if not category:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
-    if category.is_system or category.user_id != current_user.id:
+    if not category.is_system and category.user_id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot delete this category")
 
     session.delete(category)
